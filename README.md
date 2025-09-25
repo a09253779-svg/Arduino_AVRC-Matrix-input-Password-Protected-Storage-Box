@@ -12,8 +12,8 @@
     頻率=F_CPU / (預分頻 * TOP+1)
     detail:
     // Fast PWM, Prescale=8 (預分頻8)
-    //F_CPU=16MHz, 預分頻=8 => 2MHz =>0.5msec (1tick/0.5msec)
-    // TOP: 20ms 設定週期長度ICR1+1=40000 tick => 40000*0.5=200sec (50Hz)
+    //F_CPU=16MHz, 預分頻=8 => 2MHz =>0.5 miusec (1 tick/0.5 msec)
+    // TOP: 20ms 設定週期長度ICR1+1=40000 tick => 40000*0.5=20 msec (50Hz)
     // PB1 = OC1A 設為輸出 (COM1A1=1)
     
 4.servo_write():
