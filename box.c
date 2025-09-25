@@ -18,6 +18,10 @@
 #define LATCH_PIN  PB3  
 #define DATA_PIN   PB4  
 
+#define LEDB PC0
+#define LEDG PC1
+#define LEDR PC2
+
 void write_password(int* input_password,int* indx,int val){
     if(* indx==maxsizepassword)
         return;
@@ -81,6 +85,31 @@ void servo_write(uint8_t angle) {
     OCR1A=pulse*2;                         
 }
 
+void My_RGB_display(char c){
+    PORTC&=~(1<<PC0);
+    PORTC&=~(1<<PC1);
+    PORTC&=~(1<<PC2);
+    switch (c){
+        case 'R':
+            PORTC|=(1<<PC2);
+            break;
+        case 'G':
+            PORTC|=(1<<PC1);
+            break;
+        case 'B':
+            PORTC|=(1<<PC0);
+            break;
+        case ' ':
+            PORTC&=~(1<<PC0);
+            PORTC&=~(1<<PC1);
+            PORTC&=~(1<<PC2);
+            break;
+        default:
+            break;
+    }
+}
+
+
 
 int main(){
     int password[4]={0,0,0,0};
@@ -103,7 +132,13 @@ int main(){
     PORTD|=(1<<matrixout0)|(1<<matrixout1)|(1<<matrixout2);
     PORTD|=(1<<matrixin0)|(1<<matrixin1)|(1<<matrixin2)|(1<<matrixin3);
     
+    DDRC|=(1<<PC0);
+    DDRC|=(1<<PC1);
+    DDRC|=(1<<PC2);
 
+    PORTC&=~(1<<PC0);
+    PORTC&=~(1<<PC1);
+    PORTC&=~(1<<PC2);
 
     DDRB &= ~(1<<resetpin);
     PORTB|=(1<<resetpin);
@@ -115,8 +150,9 @@ int main(){
 
         if(!(PINB&(1<<resetpin))){
             setmode=1;
+            My_RGB_display('B');
             reset_input(&setindx);
-            _delay_ms(50);
+            _delay_ms(200);
         }
 
 
@@ -132,6 +168,7 @@ int main(){
                         if(val==10){
                             if(setindx==4){
                                 setmode=0;
+                                My_RGB_display(' ');
                                 servo_write(180);
                                 display(10);
                             }
@@ -152,8 +189,11 @@ int main(){
                         if(val==10){
                             if(indx==4){
                                 if(is_password_true(password,input_password)){
+                                    My_RGB_display('G');
                                     servo_write(0);
                                 }
+                                else
+                                    My_RGB_display('R');
                             }
                             reset_input(&indx);
                         }
