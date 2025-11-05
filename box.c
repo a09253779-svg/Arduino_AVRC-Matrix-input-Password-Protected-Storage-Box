@@ -12,7 +12,7 @@
 #define matrixin2 PD3
 #define matrixin3 PD4
 
-#define resetpin  PB0
+#define resetpasswordpin  PB0
 #define servopin  PB1
 #define CLOCK_PIN  PB2  
 #define LATCH_PIN  PB3  
@@ -140,15 +140,15 @@ int main(){
     PORTC&=~(1<<PC1);
     PORTC&=~(1<<PC2);
 
-    DDRB &= ~(1<<resetpin);
-    PORTB|=(1<<resetpin);
+    DDRB &= ~(1<<resetpasswordpin);
+    PORTB|=(1<<resetpasswordpin);
 
     DDRB|=(1<<DATA_PIN)|(1<<CLOCK_PIN)|(1<<LATCH_PIN); 
     servo_init();
 
     while(1){
 
-        if(!(PINB&(1<<resetpin))){
+        if(!(PINB&(1<<resetpasswordpin))){
             setmode=1;
             My_RGB_display('B');
             reset_input(&setindx);
